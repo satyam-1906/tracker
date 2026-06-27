@@ -12,4 +12,5 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 def put_data(data):
     if len(data) > 0:
         response = supabase.table('tracking_data').insert(data, returning=ReturnMethod.minimal).execute()
+        print(response)
 
