@@ -7,9 +7,12 @@ data = []
 
 def calling():
     global data
-    data = []
-    call_timer = threading.Timer(3.0, database.put_data, args=(data))
+    if len(data) > 0:
+        database.put_data(data)
+    call_timer = threading.Timer(3.0, calling)
     call_timer.start()
+    data = []
+
 
 @app.post("/webhook")
 async def handle_webhook(request: Request):
