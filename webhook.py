@@ -1,13 +1,27 @@
-from flask import Flask, request, jsonify
+from fastapi import FastAPI, Request, HTTPException
+import database
+import threading
 
-app = Flask(__name__)
+app = FastAPI()
+data = []
 
-@app.route("/webhook", methods=['POST'])
-def webhook_listener():
-    data = request.json
-    print(data)
+def calling():
+    global data
+    data = []
+    call_timer = threading.Timer(3.0, database.put_data, args=(data))
+    call_timer.start()
 
-    return jsonify({"status": "success"}), 200
+@app.post("/webhook")
+async def handle_webhook(request: Request):
+    global data
+    try:
+        payload = await request.json()
+        print(f"Received Webhook Payload: {payload}")
+        data.append(payload)
+        
+        return {"status": "success", "message": "Webhook received"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="Invalid JSON payload")
+    
 
-if __name__ == '__main__':
-    app.run(host='192.168.29.136', port=5000, debug=True)
+calling()
