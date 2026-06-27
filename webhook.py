@@ -1,9 +1,20 @@
 from fastapi import FastAPI, Request, HTTPException
 import database
 import threading
+from pydantic import BaseModel
 
 app = FastAPI()
 data = []
+
+class DataSchema(BaseModel):
+    device_id: str
+    latitude: float
+    longitude: float
+    accuracy: float
+    speed: float 
+    heading: int
+    timestamp: int
+
 
 def calling():
     global data
@@ -15,10 +26,9 @@ def calling():
 
 
 @app.post("/webhook")
-async def handle_webhook(request: Request):
+async def handle_webhook(payload: DataSchema):
     global data
     try:
-        payload = await request.json()
         print(f"Received Webhook Payload: {payload}")
         data.append(payload)
         
