@@ -9,7 +9,7 @@ def calling():
     global data
     if len(data) > 0:
         database.put_data(data)
-    call_timer = threading.Timer(3.0, calling)
+    call_timer = threading.Timer(10.0, calling)
     call_timer.start()
     data = []
 
