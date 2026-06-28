@@ -39,7 +39,14 @@ async def handle_webhook(request: Request):
 @app.get('/getMarker')
 async def sendMarker():
     try:
-        if payload:
-            return payload
+        return database.last_known_coords()
     except Exception as e:
-        return {"status": "NO_DATA"}
+        raise HTTPException(status_code=400, detail="Invalid JSON payload")
+    
+@app.post("/newUser")
+async def new_user():
+    try:
+        database.add_user()
+        return {"status": "success"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="Invalid JSON payload")
