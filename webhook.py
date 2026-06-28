@@ -38,4 +38,4 @@ async def handle_webhook(request: Request):
     
 @app.get('/getMarker')
 async def sendMarker():
-    return payload
+    return {"status": "success"}
