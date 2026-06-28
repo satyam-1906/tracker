@@ -36,6 +36,6 @@ async def handle_webhook(request: Request):
     except Exception as e:
         raise HTTPException(status_code=400, detail="Invalid JSON payload")
     
-app.get('/getMarker')
+@app.get('/getMarker')
 async def sendMarker():
     return payload
