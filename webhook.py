@@ -38,4 +38,7 @@ async def handle_webhook(request: Request):
     
 @app.get('/getMarker')
 async def sendMarker():
-    return {"status": "success"}
+    if payload:
+        return payload
+    else:
+        return {"status": "NO_DATA"}
