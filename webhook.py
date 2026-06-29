@@ -24,6 +24,11 @@ def calling():
 
 calling()
 
+@app.get("/")
+@app.head("/")
+def read_root():
+    return {"status": "healthy"}
+
 @app.post("/webhook")
 async def handle_webhook(request: Request):
     global data, payload
