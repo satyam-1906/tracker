@@ -71,6 +71,14 @@ async def set_alarm(request: Request):
         database.set_alarm(data)
         return {"status": "successful"}
 
-
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="Invalid JSON payload")
+    
+@app.get("/getUsers")
+async def get_users():
+    try:
+        users = database.get_users()
+        return users
+    
     except Exception as e:
         raise HTTPException(status_code=400, detail="Invalid JSON payload")
