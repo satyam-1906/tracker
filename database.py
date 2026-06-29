@@ -12,10 +12,7 @@ def put_data(data):
     supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
     if len(data) > 0:
         response = supabase.table('tracking_data').insert(data, returning=ReturnMethod.minimal).execute()
-        query = {
-            "device_id": data.deviceId,
-            "last_coords": [data.latitude, data.longitude]
-        }
+        query = [{"device_id": element.deviceId, "last_coords": [element.latitude, element.longitude]} for element in data]
         response = supabase.table('Users').upsert(query, returning=ReturnMethod.minimal).execute()
 
 def add_user():
