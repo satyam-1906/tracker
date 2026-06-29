@@ -50,7 +50,7 @@ def last_known_coords():
 
 def get_alarms():
     supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-    response = supabase.table('Alarms').select('*').execute()
+    response = supabase.table('Alarms').select('device_id, distance').execute()
     return response.data
 
 def set_alarm(data):
