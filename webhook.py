@@ -72,7 +72,7 @@ async def set_alarm(request: Request):
         return {"status": "successful"}
 
     except Exception as e:
-        raise HTTPException(status_code=402, detail=f'{e}')
+        return f'{e}'
     
 @app.get("/getUsers")
 async def get_users():
