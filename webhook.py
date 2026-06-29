@@ -65,7 +65,7 @@ async def get_alarms():
         raise HTTPException(status_code=400)
     
 @app.post("/setAlarm")
-async def set_alarm(request):
+async def set_alarm(request: Request):
     try:
         data = await request.json()
         database.set_alarm(data)
