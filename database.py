@@ -60,5 +60,5 @@ def set_alarm(data):
 
 def get_users():
     supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-    response = supabase.table('Alarms').select('device_id').execute()
+    response = supabase.table('Users').select('device_id').execute()
     return response.data
