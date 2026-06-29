@@ -18,10 +18,13 @@ def put_data(data):
         for user in user_list:
             for element in data[::-1]:
                 if user == element['deviceId']:
-                    query += element
+                    query += [{
+                        "device_id": user,
+                        "last_coords": [element['latitude'], element['longitude']]
+                        }]
                     break
         print(query)
-        response = supabase.table('Users').upsert(query, returning=ReturnMethod.minimal).execute()
+        response = supabase.table('Users').upsert(query, on_conflict='device_id', returning=ReturnMethod.minimal).execute()
 
 def add_user():
     device_list: list[Any] = []
