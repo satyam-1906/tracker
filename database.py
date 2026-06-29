@@ -12,8 +12,9 @@ def put_data(data):
     supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
     if len(data) > 0:
         response = supabase.table('tracking_data').insert(data, returning=ReturnMethod.minimal).execute()
-        query = list(set([f'"device_id": {element['deviceId']}, "last_coords": {[element['latitude'], element['longitude']]}' for element in data]))
-        query = [json.loads(i) for i in query]
+        set_query = list(set([f'"device_id": {element['deviceId']}, "last_coords": {[element['latitude'], element['longitude']]}' for element in data]))
+        print(set_query)
+        query = [json.loads(i) for i in set_query]
         print(query)
         response = supabase.table('Users').upsert(query, returning=ReturnMethod.minimal).execute()
 
