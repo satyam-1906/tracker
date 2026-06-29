@@ -56,7 +56,6 @@ def get_alarms():
 def set_alarm(data):
     supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
     response = supabase.table('Alarms').insert(data, returning=ReturnMethod.minimal).execute()
-    return response.data
 
 def get_users():
     supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)

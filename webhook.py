@@ -72,7 +72,7 @@ async def set_alarm(request: Request):
         return {"status": "successful"}
 
     except Exception as e:
-        return f'{e}'
+        return {"status": f'{e}'}
     
 @app.get("/getUsers")
 async def get_users():
