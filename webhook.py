@@ -55,3 +55,22 @@ async def new_user():
         return {"status": "success"}
     except Exception as e:
         raise HTTPException(status_code=400, detail="Invalid JSON payload")
+    
+@app.get("/getAlarms")
+async def get_alarms():
+    try:
+        alarms = database.get_alarms()
+        return alarms
+    except Exception as e:
+        raise HTTPException(status_code=400)
+    
+@app.post("/setAlarm")
+async def set_alarm(request: Request):
+    try:
+        data = await request.json()
+        database.set_alarm(data)
+        return {"status": "successful"}
+
+
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="Invalid JSON payload")

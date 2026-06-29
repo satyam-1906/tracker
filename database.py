@@ -14,7 +14,6 @@ def put_data(data):
     if len(data) > 0:
         response = supabase.table('tracking_data').insert(data, returning=ReturnMethod.minimal).execute()
         user_list = list(set([f'{element['deviceId']}' for element in data]))
-        print(user_list)
         for user in user_list:
             for element in data[::-1]:
                 if user == element['deviceId']:
@@ -23,7 +22,6 @@ def put_data(data):
                         "last_coords": [element['latitude'], element['longitude']]
                         }]
                     break
-        print(query)
         response = supabase.table('Users').upsert(query, on_conflict='device_id', returning=ReturnMethod.minimal).execute()
 
 def add_user():
@@ -48,4 +46,14 @@ def add_user():
 def last_known_coords():
     supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
     response = supabase.table('Users').select('device_id, last_coords').execute()
+    return response.data
+
+def get_alarms():
+    supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+    response = supabase.table('Alarms').select('*').execute()
+    return response.data
+
+def set_alarm(data):
+    supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+    response = supabase.table('Alarms').insert(data, returning=ReturnMethod.minimal).execute()
     return response.data
