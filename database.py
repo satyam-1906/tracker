@@ -10,11 +10,16 @@ SUPABASE_KEY = 'sb_publishable_x-OQLavDzat71hf1n7Oyww_quo62Cp2'
 
 def put_data(data):
     supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+    query = []
     if len(data) > 0:
         response = supabase.table('tracking_data').insert(data, returning=ReturnMethod.minimal).execute()
-        set_query = list(set(['{'+f'"device_id": "{element['deviceId']}", "last_coords": {[element['latitude'], element['longitude']]}'+'}' for element in data]))
-        print(set_query)
-        query = [json.loads(i) for i in set_query]
+        user_list = list(set([f'{element['deviceId']}' for element in data]))
+        print(user_list)
+        for user in user_list:
+            for element in data[::-1]:
+                if user == element['deviceId']:
+                    query += element
+                    break
         print(query)
         response = supabase.table('Users').upsert(query, returning=ReturnMethod.minimal).execute()
 
