@@ -60,8 +60,7 @@ async def new_user():
 async def get_alarms():
     try:
         alarms = database.get_alarms()
-        print(alarms)
-        return {"status": "successful", "data": alarms}
+        return alarms
     except Exception as e:
         raise HTTPException(status_code=400)
     
