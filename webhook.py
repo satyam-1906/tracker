@@ -87,6 +87,7 @@ async def get_users():
 async def delete_alarm(request: Request):
     try:
         data = await request.json()
+        print(data)
         database.delete_alarm(data)
         return {"status": "successful"}
     except Exception as e:
