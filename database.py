@@ -64,5 +64,5 @@ def get_users():
 
 def delete_alarm(data):
     supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-    response = supabase.table('Alarms').delete().match({"device_id": data['device_id'], "distance": data['distance']}).execute()
+    response = supabase.table('Alarms').delete().eq("device_id", data['device_id']).eq("distance", data['distance']).execute()
     print(response)
