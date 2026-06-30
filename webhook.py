@@ -2,6 +2,9 @@ from fastapi import FastAPI, Request, HTTPException
 import database
 import threading
 from fastapi.middleware.cors import CORSMiddleware
+import math
+from typing import Any, List
+import requests
 
 app = FastAPI()
 data = []
@@ -24,6 +27,29 @@ def calling():
 
 calling()
 
+def haversine(lat1, lon1, lat2, lon2):
+    R = 6371.0 # Earth radius in kilometers
+    
+    dLat = math.radians(lat2 - lat1)
+    dLon = math.radians(lon2 - lon1)
+    
+    a = math.sin(dLat/2)**2 + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dLon/2)**2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+    
+    return R * c
+
+async def warn(payload):
+    my_location: List[Any]
+    alarm: Any
+    alarms = database.get_alarms()
+    for alarm in alarms:
+        if alarm['device_id'] == payload.deviceId:
+            my_location = database.my_location()
+            curr_dist = haversine(float(my_location[0]['last_coords'][0]), float(my_location[0]['last_coords'][1]), float(payload['latitude']), float(payload['longitude']))
+            if curr_dist <= alarm['distance']:
+                response = requests.get('http://api.callmebot.com/start.php?user=@asf1906&text=This+is+a+robot+calling+you+to+inform+you+about+something+urgent+that+is+happening&lang=en-GB-Standard-B&rpt=2')
+
+
 @app.get("/")
 @app.head("/")
 def read_root():
@@ -36,7 +62,7 @@ async def handle_webhook(request: Request):
         payload = await request.json()
         print(f"Received Webhook Payload: {payload}")
         data.append(payload)
-        
+        result = warn(payload)
         return {"status": "success", "message": "Webhook received"}
     except Exception as e:
         raise HTTPException(status_code=400, detail="Invalid JSON payload")
