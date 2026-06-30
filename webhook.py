@@ -47,7 +47,7 @@ async def warn(payload):
             my_location = database.my_location()
             curr_dist = haversine(float(my_location[0]['last_coords'][0]), float(my_location[0]['last_coords'][1]), float(payload['latitude']), float(payload['longitude']))
             if curr_dist <= alarm['distance']:
-                response = requests.get('http://api.callmebot.com/start.php?user=@asf1906&text=This+is+a+robot+calling+you+to+inform+you+about+something+urgent+that+is+happening&lang=en-GB-Standard-B&rpt=2')
+                response = requests.get('https://api.callmebot.com/text.php?user=@asf1906&text=This+is+a+test+message')
 
 
 @app.get("/")
