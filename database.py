@@ -70,3 +70,13 @@ def my_location():
     supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
     response = supabase.table('Users').select('last_coords').eq("device_id", "user_c7c898ad").execute()
     return response.data
+
+def alarm_activation_state(device_id):
+    supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+    response = supabase.table('Alarms').select('active').eq("device_id", device_id).execute()
+    return response.data
+
+def set_alarm_activation_state(device_id, distance, activation_value):
+    supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+    response = supabase.table('Alarms').update({"active": activation_value}).eq("device_id", device_id).eq("distance", distance).execute()
+    return response.data

@@ -41,14 +41,18 @@ def haversine(lat1, lon1, lat2, lon2):
 async def warn(payload):
     my_location: List[Any]
     alarm: Any
+    alarm_activation_state: Any
     alarms = database.get_alarms()
     for alarm in alarms:
         if alarm['device_id'] == payload['deviceId']:
-            my_location = database.my_location()
-            curr_dist = haversine(float(my_location[0]['last_coords'][0]), float(my_location[0]['last_coords'][1]), float(payload['latitude']), float(payload['longitude']))
-            print(curr_dist)
-            if curr_dist <= alarm['distance']:
-                response = requests.get('https://api.callmebot.com/text.php?user=@asf1906&text=This+is+a+test+message')
+            alarm_activation_state = database.alarm_activation_state(alarm['device_id'])
+            if alarm_activation_state[0]['active'] == True:
+                my_location = database.my_location()
+                curr_dist = haversine(float(my_location[0]['last_coords'][0]), float(my_location[0]['last_coords'][1]), float(payload['latitude']), float(payload['longitude']))
+                if curr_dist <= alarm['distance']:
+                    response = requests.get(f'https://api.callmebot.com/text.php?user=@asf1906&text=Alarm+for+{alarm['device_id']}')
+                    database.set_alarm_activation_state(alarm['device_id'], alarm['distance'], False)
+                    threading.Timer(30.0, database.set_alarm_activation_state, args=[alarm['device_id'], alarm['distance'], True])
 
 
 @app.get("/")
