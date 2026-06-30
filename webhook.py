@@ -62,7 +62,7 @@ async def handle_webhook(request: Request):
         payload = await request.json()
         print(f"Received Webhook Payload: {payload}")
         data.append(payload)
-        result = warn(payload)
+        result = await warn(payload)
         return {"status": "success", "message": "Webhook received"}
     except Exception as e:
         raise HTTPException(status_code=400, detail="Invalid JSON payload")
