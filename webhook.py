@@ -82,3 +82,12 @@ async def get_users():
     
     except Exception as e:
         raise HTTPException(status_code=400, detail="Invalid JSON payload")
+    
+@app.post("/deleteAlarm")
+async def delete_alarm(request: Request):
+    try:
+        data = await request.json()
+        database.delete_alarm(data)
+        return {"status": "successful"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f'{e}')
