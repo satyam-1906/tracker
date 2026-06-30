@@ -52,7 +52,7 @@ async def warn(payload):
                 if curr_dist <= alarm['distance']:
                     response = requests.get(f'https://api.callmebot.com/text.php?user=@asf1906&text=Alarm+for+{alarm['device_id']}')
                     database.set_alarm_activation_state(alarm['device_id'], alarm['distance'], False)
-                    threading.Timer(30.0, database.set_alarm_activation_state, args=[alarm['device_id'], alarm['distance'], True])
+                    threading.Timer(30.0, database.set_alarm_activation_state, args=[alarm['device_id'], alarm['distance'], True]).start()
 
 
 @app.get("/")
