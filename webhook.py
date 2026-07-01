@@ -9,7 +9,7 @@ import requests
 app = FastAPI()
 data = []
 
-origins = ['https://tracker-frontend-production-0066.up.railway.app']
+origins = ['https://tracker-frontend-production-0066.up.railway.app', 'http://127.0.0.1:5500']
 app.add_middleware(CORSMiddleware,
                     allow_origins=origins,
                     allow_credentials=True,
