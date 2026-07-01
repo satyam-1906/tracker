@@ -12,7 +12,7 @@ def put_data(data):
     supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
     query = []
     if len(data) > 0:
-        response = supabase.table('tracking_data').insert(data, returning=ReturnMethod.minimal).execute()
+        #response = supabase.table('tracking_data').insert(data, returning=ReturnMethod.minimal).execute()
         user_list = list(set([f'{element['deviceId']}' for element in data]))
         for user in user_list:
             for element in data[::-1]:
